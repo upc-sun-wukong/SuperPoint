@@ -1,3 +1,7 @@
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '1'  # 只使用GPU 0
+import sys
+sys.path.append('..')
 import logging
 import yaml
 import os
@@ -9,7 +13,9 @@ from json import dumps as pprint
 from superpoint.datasets import get_dataset
 from superpoint.models import get_model
 from superpoint.utils.stdout_capturing import capture_outputs
-from superpoint.settings import EXPER_PATH
+# from superpoint.settings import EXPER_PATH
+EXPER_PATH = "./"
+
 
 logging.basicConfig(format='[%(asctime)s %(levelname)s] %(message)s',
                     datefmt='%m/%d/%Y %H:%M:%S', level=logging.INFO)
@@ -54,13 +60,19 @@ def predict(config, output_dir, n_iter):
 
 
 def set_seed(seed):
-    tf.set_random_seed(seed)
+    # tf.set_random_seed(seed)
+    tf.compat.v1.set_random_seed(seed)
     np.random.seed(seed)
 
 
 def get_num_gpus():
-    return len(os.environ['CUDA_VISIBLE_DEVICES'].split(','))
-
+    # return len(os.environ['CUDA_VISIBLE_DEVICES'].split(','))
+    # 检查环境变量是否存在
+    if 'CUDA_VISIBLE_DEVICES' in os.environ:
+        return len(os.environ['CUDA_VISIBLE_DEVICES'].split(','))
+    else:
+        # 如果没有设置，返回0或适当的值
+        return 0
 
 @contextmanager
 def _init_graph(config, with_dataset=False):
@@ -150,7 +162,8 @@ if __name__ == '__main__':
 
     args = parser.parse_args()
     with open(args.config, 'r') as f:
-        config = yaml.load(f)
+        # config = yaml.load(f)
+        config = yaml.safe_load(f)  # 使用 safe_load
     output_dir = os.path.join(EXPER_PATH, args.exper_name)
     if not os.path.exists(output_dir):
         os.mkdir(output_dir)

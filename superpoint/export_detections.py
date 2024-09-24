@@ -1,3 +1,5 @@
+import os
+os.environ['CUDA_VISIBLE_DEVICES'] = '0'  # 只使用GPU 0
 import numpy as np
 import os
 import argparse
@@ -21,8 +23,10 @@ if __name__ == '__main__':
     experiment_name = args.experiment_name
     export_name = args.export_name if args.export_name else experiment_name
     batch_size = args.batch_size
+    # with open(args.config, 'r') as f:
+    #     config = yaml.load(f)
     with open(args.config, 'r') as f:
-        config = yaml.load(f)
+        config = yaml.safe_load(f)
     assert 'eval_iter' in config
 
     output_dir = Path(EXPER_PATH, 'outputs/{}/'.format(export_name))

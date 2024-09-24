@@ -5,7 +5,7 @@ import cv2
 import numpy as np
 import tensorflow as tf  # noqa: E402
 
-from superpoint.settings import EXPER_PATH  # noqa: E402
+# from superpoint.settings import EXPER_PATH  # noqa: E402
 
 
 def extract_SIFT_keypoints_and_descriptors(img):
@@ -104,7 +104,8 @@ if __name__ == '__main__':
     img_size = (args.W, args.H)
     keep_k_best = args.k_best
 
-    weights_root_dir = Path(EXPER_PATH, 'saved_models')
+    # weights_root_dir = Path(EXPER_PATH, 'saved_models')
+    weights_root_dir = Path('E:\\daily_Log\\0731\\SuperPoint\\superpoint\\saved_models')
     weights_root_dir.mkdir(parents=True, exist_ok=True)
     weights_dir = Path(weights_root_dir, weights_name)
 

@@ -68,7 +68,8 @@ class SyntheticShapes(BaseDataset):
     ]
 
     def dump_primitive_data(self, primitive, tar_path, config):
-        temp_dir = Path(os.environ['TMPDIR'], primitive)
+        # temp_dir = Path(os.environ['TMPDIR'], primitive)
+        temp_dir = Path(os.environ.get('TMPDIR', 'E:\\daily_Log\\0731\\SuperPoint\\temp'), primitive)
 
         tf.logging.info('Generating tarfile for primitive {}.'.format(primitive))
         synthetic_dataset.set_random_state(np.random.RandomState(
@@ -126,9 +127,11 @@ class SyntheticShapes(BaseDataset):
                 self.dump_primitive_data(primitive, tar_path, config)
 
             # Untar locally
-            tf.logging.info('Extracting archive for primitive {}.'.format(primitive))
+            # tf.logging.info('Extracting archive for primitive {}.'.format(primitive))
+            tf.compat.v1.logging.info('Extracting archive for primitive {}.'.format(primitive))
             tar = tarfile.open(tar_path)
-            temp_dir = Path(os.environ['TMPDIR'])
+            # temp_dir = Path(os.environ['TMPDIR'])
+            temp_dir = Path(os.environ.get('TMPDIR', 'E:\\daily_Log\\0731\\SuperPoint\\temp'), primitive)
             tar.extractall(path=temp_dir)
             tar.close()
 
@@ -164,7 +167,8 @@ class SyntheticShapes(BaseDataset):
                        np.flip(points.astype(np.float32), 1))
 
         def _read_image(filename):
-            image = tf.read_file(filename)
+            # image = tf.read_file(filename)
+            image = tf.io.read_file(filename)
             image = tf.image.decode_png(image, channels=1)
             return tf.cast(image, tf.float32)
 

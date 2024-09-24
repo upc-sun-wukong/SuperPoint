@@ -1,7 +1,3 @@
-"""PyTorch implementation of the SuperPoint model,
-   derived from the TensorFlow re-implementation (2018).
-   Authors: Rémi Pautrat, Paul-Edouard Sarlin
-"""
 import torch.nn as nn
 import torch
 from collections import OrderedDict
